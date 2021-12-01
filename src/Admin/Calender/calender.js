@@ -1,5 +1,29 @@
 import React from 'react'
+import Calendar from 'react-awesome-calendar';
+
 export default function Calender() {
+
+    const events = [{
+        id: 1,
+        color: '#fd3153',
+        from: '2019-05-02T18:00:00+00:00',
+        to: '2019-05-05T19:00:00+00:00',
+        title: 'This is an event'
+    }, {
+        id: 2,
+        color: '#1ccb9e',
+        from: '2019-05-01T13:00:00+00:00',
+        to: '2019-05-05T14:00:00+00:00',
+        title: 'This is another event'
+    }, {
+        id: 3,
+        color: '#3694DF',
+        from: '2019-05-05T13:00:00+00:00',
+        to: '2019-05-05T20:00:00+00:00',
+        title: 'This is also another event'
+    }];
+
+
     return (
         <>
             <section class="content page-calendar">
@@ -23,15 +47,20 @@ export default function Calender() {
                         <div class="row">
                             <div class="col-md-12 col-lg-8 col-xl-8">
                                 <div class="card">
+
                                     <div class="body">
-                                        <div id="calendar"></div>
+                                        {/* <div id="calendar"></div> */}
+                                        <Calendar
+                                            events={events}
+                                        />
+
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12 col-lg-4 col-xl-4">
                                 <div class="card p-3" >
                                     <div class="event_list">
-                                        <button type="button" class="btn btn-info btn-block waves-effect" data-toggle="modal" data-target="#addevent">Add Events</button>
+                                        <button type="button" class="btn btn-info btn-block waves-effect" data-toggle="modal" data-target="#addNewEvent">Add Events</button>
                                         <div class="e_list">
                                             <h5 class="e_name">11 September <span class="badge badge-primary float-right">Conference</span></h5>
                                             <address><i class="zmdi zmdi-pin"></i> 123 6th St. Melbourne, FL 32904</address>

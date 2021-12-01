@@ -6,24 +6,28 @@ import Sidebar from './Sidebars/Sidebar';
 import Users from '../Admin/User';
 import AddBike from '../Admin/Bikes/AddBike';
 import AddUser from '../Admin/User/AddUser';
-import ManageBookings from '../Admin/Bookings';
-import AddBooking from '../Admin/Bookings/AddBooking';
 import Calender from './Calender/calender';
-// import './Dashboard/sidebarStyle.scss';
 import RightSidebar from './Sidebars/RightSidebar';
-import Login from './Login';
+import Login from './Login/Login';
+import Signup from './Signup/Signup';
+import AllBookings from './Bookings/AllBookings';
+import AllBikes from './Bikes/AllBikes';
+import Chats from './chats';
 
 export default function AllRoutes() {
     return (
         <Router>
             <Switch>
-                <Route exact path='/login'>
-                    <Login />
-                </Route>
                 <Route exact path='/'>
                     <Sidebar />
                     <RightSidebar />
                     <Admin />
+                </Route>
+                <Route exact path='/login'>
+                    <Login />
+                </Route>
+                <Route exact path='/signup'>
+                    <Signup />
                 </Route>
                 <Route exact path='/admin'>
                     <Sidebar />
@@ -33,7 +37,7 @@ export default function AllRoutes() {
                 <Route exact path='/adminbikes'>
                     <Sidebar />
                     <RightSidebar />
-                    <BikesAdmin />
+                    <AllBikes />
                 </Route>
                 <Route exact path='/adminaddbike'>
                     <Sidebar />
@@ -53,17 +57,17 @@ export default function AllRoutes() {
                 <Route exact path='/adminmanagebookings'>
                     <Sidebar />
                     <RightSidebar />
-                    <ManageBookings />
+                    <AllBookings />
                 </Route>
-                <Route exact path='/adminaddbooking'>
-                    <Sidebar />
-                    <RightSidebar />
-                    <AddBooking />
-                </Route>
+
                 <Route exact path='/admincalender'>
                     <Sidebar />
                     <RightSidebar />
                     <Calender />
+                </Route>
+                <Route exact path='/chats'>
+                    <Sidebar />
+                    <Chats />
                 </Route>
             </Switch>
         </Router>

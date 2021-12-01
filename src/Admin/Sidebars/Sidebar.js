@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 export default function Sidebar() {
+    let admin = localStorage.getItem('adminName');
     return (
         <>
             <aside id="leftsidebar" class="sidebar ">
@@ -15,35 +16,20 @@ export default function Sidebar() {
                             <div className="user-info">
                                 <a class="image " href="profile.html"><img src="myPhoto.png" alt="User" /></a>
                                 <div class="detail">
-                                    <h4>Danish</h4>
+                                    <h4>{admin}</h4>
                                     <small>Super Admin</small>
                                 </div>
                             </div>
                         </li>
                         <li><Link to='/admin' href="index.html"><i class="zmdi zmdi-home"></i><span>Dashboard</span></Link></li>
-                        <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-bike"></i><span>Bikes</span></a>
-                            <ul class="ml-menu">
-                                <li><Link to='adminbikes'>All Bikes</Link></li>
-                                <li><Link to='adminaddbike'>Add Bike</Link></li>
-                            </ul>
-                        </li>
-                        <li> <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-assignment"></i><span>Manage Bookings</span></a>
-                            <ul class="ml-menu">
-                                <li><Link to='/adminmanagebookings'>All Bookings</Link></li>
-                                <li><Link to='/adminaddbooking'>Add Booking</Link></li>
-                            </ul>
-                        </li>
+                        <li><Link to='adminbikes' ><i class="zmdi zmdi-bike"></i><span>Bikes</span></Link></li>
+                        <li> <Link to='/adminmanagebookings' ><i class="zmdi zmdi-assignment"></i><span>Manage Bookings</span></Link> </li>
                         <li><Link to='/admincalender'><i class="zmdi zmdi-calendar-check"></i><span>Calender</span></Link></li>
-                        <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account"></i><span>Users</span></a>
-                            <ul class="ml-menu">
-                                <li><Link to='/adminusers'>All Users</Link></li>
-                                <li><Link to='/adminadduser'>Add User</Link></li>
-                            </ul>
-                        </li>
+                        <li><Link to='/adminusers'><i class="zmdi zmdi-account"></i><span>Users</span></Link></li>
 
-                        <li><Link href="javascript:void(0);"><i class="zmdi zmdi-inbox"></i><span>Chats</span></Link> </li>
+                        <li><Link to="/chats"><i class="zmdi zmdi-inbox"></i><span>Chats</span></Link> </li>
 
-                        <li class="open_top"><a href="javascript:void(0);"><i class="zmdi zmdi-map"></i><span>Logout</span></a></li>
+                        <li class="open_top"><Link to="/signup"><i class="zmdi zmdi-map"></i><span>Logout</span></Link></li>
 
                     </ul>
                 </div>

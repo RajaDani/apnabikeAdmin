@@ -1,6 +1,8 @@
-import React from "react";
-import { Container, Row, Col } from "reactstrap";
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col, Table } from "reactstrap";
 import '../../sidebarStyle.scss'
+import { BaseUrl } from '../../BaseUrl';
+
 
 //Import Components
 import MiniWidget from "./mini-widget";
@@ -163,13 +165,15 @@ const options4 = {
 
 const Dashboard = () => {
 
+  const [totalBikes, settotalBikes] = useState()
+
   const reports = [
     {
       id: 1,
       icon: "mdi mdi-arrow-up-bold",
       title: "Total Bikes",
-      value: 34152,
-      prefix: "$",
+      value: totalBikes,
+      prefix: "",
       suffix: "",
       badgeValue: "2.65%",
       decimal: 0,
@@ -234,6 +238,33 @@ const Dashboard = () => {
       options: options4,
     },
   ];
+
+  const getTotalBikes = async () => {
+    let total = await fetch(BaseUrl + 'bikes/totalbikes');
+    let result = await total.json();
+    if (total.status === 200) {
+      console.log(result.totalBikes);
+      settotalBikes(result.totalBikes);
+    }
+  }
+
+  const getTotalCustomers = () => {
+
+  }
+
+  const getTotalBookings = () => {
+
+  }
+
+  useEffect(() => {
+    getTotalBikes();
+    getTotalCustomers();
+    getTotalBookings();
+
+    setTimeout(() => {
+      console.table(reports)
+    }, 2000)
+  }, [])
 
   return (
     <React.Fragment>

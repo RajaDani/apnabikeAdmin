@@ -5,6 +5,8 @@ import CountUp from 'react-countup';
 import ReactApexChart from "react-apexcharts";
 
 const MiniWidget = props => {
+
+
   return (
     <React.Fragment>
       {props.reports.map((report, key) => (

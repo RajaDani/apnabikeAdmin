@@ -1,228 +1,184 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import {
-  Card,
-  Col,
-  Container,
-  Form,
-  Input,
-  Label,
-  Row,
-} from "reactstrap";
+import { BaseUrl } from '../BaseUrl';
+import { Card, Col, Container, Form, Input, Label, Row, } from "reactstrap";
+import AddRent from "./AddRent";
+
 
 const AddBike = () => {
-  const [selectedFiles, setselectedFiles] = useState([]);
-  const [isOpen, setIsOpen] = useState(true);
 
-  const options = [
-    { value: "AK", label: "Alaska" },
-    { value: "HI", label: "Hawaii" },
-    { value: "CA", label: "California" },
-    { value: "NV", label: "Nevada" },
-    { value: "OR", label: "Oregon" },
-    { value: "WA", label: "Washington" }
-  ];
+  const [rentComponent, setrentComponent] = useState(false)
+  const [addBikeComponent, setaddBikeComponent] = useState(true)
+  const [bikeId, setbikeId] = useState('')
 
-  function handleAcceptedFiles(files) {
-    files.map(file =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-        formattedSize: formatBytes(file.size)
-      })
-    );
+  async function submitHandler(e) {
 
-    setselectedFiles(files);
-  }
+    e.preventDefault();
 
-  function formatBytes(bytes, decimals = 2) {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    let company = document.getElementById('company').value;
+    let city = document.getElementById('city').value;
+    let model = document.getElementById('model').value;
+    let chasis_no = document.getElementById('chasis_no').value;
+    let status = document.getElementById('status').value;
+    let image = document.getElementById('image').files[0].name;
 
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+    let bike = await fetch(BaseUrl + 'bikes/addbike', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ company: company, category: '125cc', city: city, model: model, chasis_no: chasis_no, status: status, image: image })
+    });
+
+    let newBike = await bike.json();
+
+    if (bike.status === 200 && newBike.message == 'Bike Added') {
+      console.log(newBike);
+      console.log('bikeId', newBike.bikesData.bike_id);
+      setbikeId(newBike.bikesData.bike_id)
+      setaddBikeComponent(!addBikeComponent);
+      setrentComponent(!rentComponent);
+    }
+    else alert(newBike.message);
   }
 
   return (
     <React.Fragment>
-      <Container fluid >
-        <section class="content" style={{ backgroundColor: 'white' }}>
-          <div class="block-header" style={{ backgroundColor: '#f7f7f7', padding: '20px', borderRadius: '5px' }}>
-            <div class="row">
-              <div class="col-lg-7 col-md-6 col-sm-12">
-                <h2>Dashboard</h2>
-                <ul class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="index.html"><i class="zmdi zmdi-home"></i> Aero</a></li>
-                  <li class="breadcrumb-item active">Dashboard 1</li>
-                </ul>
-              </div>
-              <div class="col-lg-5 col-md-6 col-sm-12">
-                <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i class="zmdi zmdi-arrow-right"></i></button>
+      {rentComponent === true ?
+        <AddRent bikeId={bikeId} /> : null
+      }
+
+      {addBikeComponent === true ?
+        <Container fluid >
+          <section class="content" style={{ backgroundColor: 'white' }}>
+            <div class="block-header" style={{ backgroundColor: '#f7f7f7', padding: '20px', borderRadius: '5px' }}>
+              <div class="row">
+                <div class="col-lg-7 col-md-6 col-sm-12">
+                  <h2>Bikes</h2>
+                  <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html"><i class="zmdi zmdi-home"></i> ApnaBike</a></li>
+                    <li class="breadcrumb-item active">Add Bike</li>
+                  </ul>
+                </div>
+                <div class="col-lg-5 col-md-6 col-sm-12">
+                  <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i class="zmdi zmdi-arrow-right"></i></button>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="container-fluid ">
-
-            <Row>
-              <Col lg="12">
-                <div id="addproduct-accordion" className="custom-accordion mt-1" >
-                  <Card>
-                    <div className="p-4">
-                      <div className="d-flex align-items-center">
-                        <div className="flex-grow-1 overflow-hidden">
-                          <h5 className="font-size-16 mb-1">Add New Bike</h5>
-                          <p className="text-muted text-truncate mb-0">Fill all information below</p>
+            <div class="container-fluid ">
+              <Row>
+                <Col lg="12">
+                  <div id="addproduct-accordion" className="custom-accordion mt-1" >
+                    <Card>
+                      <div className="p-4">
+                        <div className="d-flex align-items-center">
+                          <div className="flex-grow-1 overflow-hidden">
+                            <h5 className="font-size-16 mb-1">Add New Bike</h5>
+                            <p className="text-muted text-truncate mb-0">Fill all information below</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="p-4 border-top">
-                      <Form>
-                        <div className="mb-3">
-                          <Label htmlFor="productname">Company Name</Label>
-                          <input
-                            id="productname"
-                            name="productname"
-                            placeholder="Company Name"
-                            type="text"
-                            className="form-control"
-                          />
-                        </div>
-                        <Row>
-                          <Col md="12">
-                            <div className="mb-3">
-                              <Label className="control-label">Category</Label>
-                              <select className="form-control">
-                                <option>Select</option>
-                                <option value="AK">Chakwal</option>
-                                <option value="HI">Rawalpindi</option>
-                                <option value="HI">Islamabad</option>
-                                <option value="HI">Karachi</option>
-                                <option value="HI">Peshawar</option>
-                              </select>
-                            </div>
-                          </Col>
-                        </Row>
-                        <Row>
+                      <div className="p-4 border-top">
+                        <Form onSubmit={(e) => submitHandler(e)}>
+                          <div className="mb-3">
+                            <Label htmlFor="productname">Company Name</Label>
+                            <input
+                              id="company"
+                              placeholder="Company Name"
+                              type="text"
+                              className="form-control"
+                            />
+                          </div>
+                          <Row>
+                            <Col md="12">
+                              <div className="mb-3">
+                                <Label className="control-label">City</Label>
+                                <select className="form-control" id="city">
+                                  <option>Select</option>
+                                  <option>Chakwal</option>
+                                  <option>Rawalpindi</option>
+                                  <option>Islamabad</option>
+                                  <option>Karachi</option>
+                                  <option>Peshawar</option>
+                                </select>
+                              </div>
+                            </Col>
+                          </Row>
+                          <Row>
 
-                          <Col lg="4">
-                            <div className="mb-3">
-                              <Label htmlFor="manufacturername">
-                                Model
-                              </Label>
-                              <input
-                                id="model"
-                                name="model"
-                                type="text"
-                                placeholder="Model"
-                                className="form-control"
-                              />
-                            </div>
-                          </Col>
-                          <Col lg="4">
-                            <div className="mb-3">
-                              <Label htmlFor="manufacturerbrand">
-                                Chasis_no
-                              </Label>
-                              <input
-                                id="chasis_no"
-                                name="chasis_no"
-                                type="text"
-                                placeholder="Chasis No"
-                                className="form-control"
-                              />
-                            </div>
-                          </Col>
+                            <Col lg="4">
+                              <div className="mb-3">
+                                <Label htmlFor="manufacturername">
+                                  Model
+                                </Label>
+                                <input
+                                  id="model"
+                                  type="text"
+                                  placeholder="Model"
+                                  className="form-control"
+                                />
+                              </div>
+                            </Col>
+                            <Col lg="4">
+                              <div className="mb-3">
+                                <Label htmlFor="manufacturerbrand">
+                                  Chasis_no
+                                </Label>
+                                <input
+                                  id="chasis_no"
+                                  type="text"
+                                  placeholder="Chasis No"
+                                  className="form-control"
+                                />
+                              </div>
+                            </Col>
 
-                          <Col lg="4">
-                            <div className="mb-3">
-                              <Label htmlFor="price">Status</Label>
-                              <select className="form-control">
-                                <option>Select</option>
-                                <option value="AK">0</option>
-                                <option value="HI">1</option>
-                              </select>
-                            </div>
-                          </Col>
-                        </Row>
+                            <Col lg="4">
+                              <div className="mb-3">
+                                <Label htmlFor="price">Status</Label>
+                                <select className="form-control" id="status">
+                                  <option>Select</option>
+                                  <option>0</option>
+                                  <option>1</option>
+                                </select>
+                              </div>
+                            </Col>
+                          </Row>
 
+                          <Row>
+                            <Col md="12">
+                              <div className="mb-3">
+                                <Label className="control-label">Select Image</Label>
+                                <input type="file" id="image" className="form-control p-1" accept="image/*" />
+                              </div>
+                            </Col>
+                          </Row>
 
+                          <div className="mb-0">
+                            <Label htmlFor="productdesc">
+                              Product Description
+                            </Label>
+                            <textarea
+                              className="form-control"
+                              id="productdesc"
+                              rows="4"
+                            />
+                          </div>
+                          <div className="confirmBtns mt-4">
+                            <button className="btn btn-danger buttons"> <i className="zmdi zmdi-close"></i> Cancel </button>
+                            <button type="submit" className="btn btn-success buttons"> <i className="zmdi zmdi-assignment"></i> Save </button>
+                          </div>
 
-                        <Row>
-                          <Col md="4">
-                            <div className="mb-3">
-                              <Label className="control-label">Daily Rent</Label>
-                              <Input
-                                id="daily_rent"
-                                name="daily_rent"
-                                type="text"
-                                placeholder="Daily rent"
-                                className="form-control"
-                              />
-                            </div>
-                          </Col>
-                          <Col md="4">
-                            <div className="mb-3">
-                              <Label className="control-label">Weekly Rent</Label>
-                              <Input
-                                id="Weekly_rent"
-                                name="Weekly_rent"
-                                type="text"
-                                placeholder="Weekly rent"
-                                className="form-control"
-                              />
-                            </div>
-                          </Col>
-                          <Col md="4">
-                            <div className="mb-3">
-                              <Label className="control-label">Monthly Rent</Label>
-                              <Input
-                                id="Monthly_rent"
-                                name="Monthly_rent"
-                                type="text"
-                                placeholder="Monthly rent"
-                                className="form-control"
-                              />
-                            </div>
-                          </Col>
-                        </Row>
-
-                        <Row>
-                          <Col md="12">
-                            <div className="mb-3">
-                              <Label className="control-label">Select Image</Label>
-                              <input type="file" className="form-control p-1" accept="image/*" />
-                            </div>
-                          </Col>
-                        </Row>
-
-                        <div className="mb-0">
-                          <Label htmlFor="productdesc">
-                            Product Description
-                          </Label>
-                          <textarea
-                            className="form-control"
-                            id="productdesc"
-                            rows="4"
-                          />
-                        </div>
-
-
-
-                      </Form>
-                    </div>
-                  </Card>
-                </div>
-              </Col>
-            </Row>
-
-            <div className="confirmBtns">
-              <Link to="#" className="btn btn-danger buttons"> <i className="zmdi zmdi-close"></i> Cancel </Link>
-              <Link to="#" className="btn btn-success buttons"> <i className="zmdi zmdi-assignment"></i> Save </Link>
+                        </Form>
+                      </div>
+                    </Card>
+                  </div>
+                </Col>
+              </Row>
             </div>
-          </div>
-        </section >
-      </Container >
+          </section >
+        </Container >
+        : null}
     </React.Fragment >
   );
 };
