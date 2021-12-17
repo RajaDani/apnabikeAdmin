@@ -8,7 +8,6 @@ const md5 = require('md5');
 export default function Login() {
 
     const history = useHistory();
-
     async function submitHandler(e) {
 
         e.preventDefault();
@@ -16,7 +15,7 @@ export default function Login() {
         let pass = document.getElementById('password').value;
 
         let password = md5(pass);
-        let admin = await fetch(BaseUrl + 'users/verifyadmin', {
+        let admin = await fetch(BaseUrl + 'admin/users/verifyadmin', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

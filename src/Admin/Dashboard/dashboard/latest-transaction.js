@@ -1,202 +1,70 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardBody, Table, CardTitle, Label, Input, Row, Col, Button } from "reactstrap";
-import { Link } from "react-router-dom";
+import { BaseUrl } from "../../BaseUrl";
+
 
 const LatestTransaction = () => {
+
+    const [bookings, setbookings] = useState([])
+    let adminToken = localStorage.getItem('adminToken');
+
+    async function getLatestBookings() {
+        let bookings = await fetch(BaseUrl + 'admin/dashboard/getLatestTransactions', {
+            method: 'GET',
+            headers: {
+                'Content-type': 'Application/json',
+                "Authorization": `Bearer ${adminToken}`
+            }
+        });
+        let result = await bookings.json();
+
+        if (bookings.status === 200) {
+            setbookings(result);
+        }
+        else alert(result.message);
+    }
+
+
+    useEffect(() => {
+        getLatestBookings()
+    }, [])
     return (
         <Row>
             <Col lg={12}>
                 <Card style={{ backgroundColor: 'white' }}>
                     <CardBody>
-                        <CardTitle className="h4 mb-4">Latest Transaction</CardTitle>
-                        <div className="table-responsive">
-                            <Table className="table-centered table-nowrap mb-0">
-                                <thead className="table-light">
-                                    <tr>
-                                        <th style={{ width: "20px" }}>
-                                            <div className="form-check font-size-16">
-                                                <Input type="checkbox" className="form-check-input" id="customCheck1" />
-                                                <Label className="form-check-label" for="customCheck1">&nbsp;</Label>
-                                            </div>
-                                        </th>
-                                        <th>Order ID</th>
-                                        <th>Billing Name</th>
-                                        <th>Date</th>
-                                        <th>Total</th>
-                                        <th>Payment Status</th>
-                                        <th>Payment Method</th>
-                                        <th>View Details</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div className="form-check font-size-16">
-                                                <Input type="checkbox" className="form-check-input" id="customCheck2" />
-                                                <Label className="form-check-label" for="customCheck2">&nbsp;</Label>
-                                            </div>
-                                        </td>
-                                        <td><Link to="#" className="text-body fw-bold">#MB2540</Link> </td>
-                                        <td>Neal Matthews</td>
-                                        <td>
-                                            07 Oct, 2019
-                                        </td>
-                                        <td>
-                                            $400
-                                        </td>
-                                        <td>
-                                            <span className="badge rounded-pill bg-soft-success font-size-12">Paid</span>
-                                        </td>
-                                        <td>
-                                            <i className="fab fa-cc-mastercard me-1"></i> Mastercard
-                                        </td>
-                                        <td>
+                        <CardTitle className="h4 mb-4 ml-4">Latest Transaction</CardTitle>
+                        <div class="card bikesTable ">
 
-                                            <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
-                                                View Details
-                                            </Button>
-                                        </td>
-                                    </tr>
+                            <div class="card-body">
+                                <div id="table" class="table-editable">
+                                    <table id="detailTbl" class="table table-bordered table-responsive-md text-center">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Bike</th>
+                                                <th class="text-center">Client</th>
+                                                <th class="text-center">Booked From</th>
+                                                <th class="text-center">Booked Till</th>
+                                                <th class="text-center">Total</th>
+                                                <th class="text-center">Payment Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {bookings.map(booking =>
+                                                <tr key={booking.booked_bikes_id}>
+                                                    <td id={"bikeId" + booking.booked_bikes_id} class="pt-3-half" contenteditable="true">{booking.bike_id}</td>
+                                                    <td id={"userId" + booking.booked_bikes_id} class="pt-3-half" contenteditable="true">{booking.user_id}</td>
+                                                    <td id={"booked_from" + booking.booked_bikes_id} class="pt-3-half" contenteditable="true">{booking.booked_from}</td>
+                                                    <td id={"booked_till" + booking.booked_bikes_id} class="pt-3-half" contenteditable="true">{booking.booked_till}</td>
+                                                    <td id={"total" + booking.booked_bikes_id} class="pt-3-half" contenteditable="true">{booking.total_amount}</td>
+                                                    <td id={"payment_status" + booking.booked_bikes_id} class="pt-3-half" contenteditable="true">{booking.payment_status}</td>
 
-                                    <tr>
-                                        <td>
-                                            <div className="form-check font-size-16">
-                                                <Input type="checkbox" className="form-check-input" id="customCheck3" />
-                                                <Label className="form-check-label" for="customCheck3">&nbsp;</Label>
-                                            </div>
-                                        </td>
-                                        <td><Link to="#" className="text-body fw-bold">#MB2541</Link> </td>
-                                        <td>Jamal Burnett</td>
-                                        <td>
-                                            07 Oct, 2019
-                                        </td>
-                                        <td>
-                                            $380
-                                        </td>
-                                        <td>
-                                            <span className="badge rounded-pill bg-soft-danger font-size-12">Chargeback</span>
-                                        </td>
-                                        <td>
-                                            <i className="fab fa-cc-visa me-1"></i> Visa
-                                        </td>
-                                        <td>
-
-                                            <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
-                                                View Details
-                                            </Button>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <div className="form-check font-size-16">
-                                                <Input type="checkbox" className="form-check-input" id="customCheck4" />
-                                                <Label className="form-check-label" for="customCheck4">&nbsp;</Label>
-                                            </div>
-                                        </td>
-                                        <td><Link to="#" className="text-body fw-bold">#MB2542</Link> </td>
-                                        <td>Juan Mitchell</td>
-                                        <td>
-                                            06 Oct, 2019
-                                        </td>
-                                        <td>
-                                            $384
-                                        </td>
-                                        <td>
-                                            <span className="badge rounded-pill bg-soft-success font-size-12">Paid</span>
-                                        </td>
-                                        <td>
-                                            <i className="fab fa-cc-paypal me-1"></i> Paypal
-                                        </td>
-                                        <td>
-                                            <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
-                                                View Details
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div className="form-check font-size-16">
-                                                <Input type="checkbox" className="form-check-input" id="customCheck5" />
-                                                <Label className="form-check-label" for="customCheck5">&nbsp;</Label>
-                                            </div>
-                                        </td>
-                                        <td><Link to="#" className="text-body fw-bold">#MB2543</Link> </td>
-                                        <td>Barry Dick</td>
-                                        <td>
-                                            05 Oct, 2019
-                                        </td>
-                                        <td>
-                                            $412
-                                        </td>
-                                        <td>
-                                            <span className="badge rounded-pill bg-soft-success font-size-12">Paid</span>
-                                        </td>
-                                        <td>
-                                            <i className="fab fa-cc-mastercard me-1"></i> Mastercard
-                                        </td>
-                                        <td>
-                                            <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
-                                                View Details
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div className="form-check font-size-16">
-                                                <Input type="checkbox" className="form-check-input" id="customCheck6" />
-                                                <Label className="form-check-label" for="customCheck6">&nbsp;</Label>
-                                            </div>
-                                        </td>
-                                        <td><Link to="#" className="text-body fw-bold">#MB2544</Link> </td>
-                                        <td>Ronald Taylor</td>
-                                        <td>
-                                            04 Oct, 2019
-                                        </td>
-                                        <td>
-                                            $404
-                                        </td>
-                                        <td>
-                                            <span className="badge rounded-pill bg-soft-warning font-size-12">Refund</span>
-                                        </td>
-                                        <td>
-                                            <i className="fab fa-cc-visa me-1"></i> Visa
-                                        </td>
-                                        <td>
-                                            <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
-                                                View Details
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div className="form-check font-size-16">
-                                                <Input type="checkbox" className="form-check-input" id="customCheck7" />
-                                                <Label className="form-check-label" for="customCheck7">&nbsp;</Label>
-                                            </div>
-                                        </td>
-                                        <td><Link to="#" className="text-body fw-bold">#MB2545</Link> </td>
-                                        <td>Jacob Hunter</td>
-                                        <td>
-                                            04 Oct, 2019
-                                        </td>
-                                        <td>
-                                            $392
-                                        </td>
-                                        <td>
-                                            <span className="badge rounded-pill bg-soft-success font-size-12">Paid</span>
-                                        </td>
-                                        <td>
-                                            <i className="fab fa-cc-paypal me-1"></i> Paypal
-                                        </td>
-                                        <td>
-                                            <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
-                                                View Details
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </Table>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </CardBody>
                 </Card>

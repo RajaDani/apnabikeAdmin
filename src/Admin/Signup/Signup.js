@@ -20,11 +20,12 @@ export default function Signup() {
         console.log(firstname, lastname, email, pass);
 
         let password = md5(pass);
-        let admin = await fetch(BaseUrl + 'users/addadmin', {
+        let admin = await fetch(BaseUrl + 'admin/users/addadmin', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+
             },
             body: JSON.stringify({ firstname: firstname, lastname: lastname, email: email, password: password })
         });
@@ -32,6 +33,7 @@ export default function Signup() {
         if (admin.status === 200) {
             var result = await admin.json();
             localStorage.setItem('adminName', result.adminName)
+            localStorage.setItem('adminToken', result.token)
             history.push('/admin');
         }
         else {

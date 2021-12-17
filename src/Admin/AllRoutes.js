@@ -1,26 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Switch, Route, } from 'react-router-dom';
 import Admin from '../Admin/Dashboard/Admin';
-import BikesAdmin from '../Admin/Bikes';
 import Sidebar from './Sidebars/Sidebar';
 import Users from '../Admin/User';
 import AddBike from '../Admin/Bikes/AddBike';
 import AddUser from '../Admin/User/AddUser';
 import Calender from './Calender/calender';
-import RightSidebar from './Sidebars/RightSidebar';
 import Login from './Login/Login';
 import Signup from './Signup/Signup';
 import AllBookings from './Bookings/AllBookings';
 import AllBikes from './Bikes/AllBikes';
 import Chats from './chats';
+import './adminStyle.scss';
 
 export default function AllRoutes() {
+
     return (
         <Router>
             <Switch>
                 <Route exact path='/'>
                     <Sidebar />
-                    <RightSidebar />
+                    {/* <RightSidebar /> */}
                     <Admin />
                 </Route>
                 <Route exact path='/login'>
@@ -31,44 +31,44 @@ export default function AllRoutes() {
                 </Route>
                 <Route exact path='/admin'>
                     <Sidebar />
-                    <RightSidebar />
+                    {/* <RightSidebar /> */}
                     <Admin />
                 </Route>
                 <Route exact path='/adminbikes'>
                     <Sidebar />
-                    <RightSidebar />
+                    {/* <RightSidebar /> */}
                     <AllBikes />
                 </Route>
                 <Route exact path='/adminaddbike'>
                     <Sidebar />
-                    <RightSidebar />
+                    {/* <RightSidebar /> */}
                     <AddBike />
                 </Route>
                 <Route exact path='/adminadduser'>
                     <Sidebar />
-                    <RightSidebar />
+                    {/* <RightSidebar /> */}
                     <AddUser />
                 </Route>
                 <Route exact path='/adminusers'>
                     <Sidebar />
-                    <RightSidebar />
                     <Users />
                 </Route>
                 <Route exact path='/adminmanagebookings'>
                     <Sidebar />
-                    <RightSidebar />
+                    {/* <RightSidebar /> */}
                     <AllBookings />
                 </Route>
 
                 <Route exact path='/admincalender'>
                     <Sidebar />
-                    <RightSidebar />
+                    {/* <RightSidebar /> */}
                     <Calender />
                 </Route>
                 <Route exact path='/chats'>
                     <Sidebar />
                     <Chats />
                 </Route>
+
             </Switch>
         </Router>
     )

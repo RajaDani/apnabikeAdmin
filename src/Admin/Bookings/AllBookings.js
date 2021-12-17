@@ -8,14 +8,24 @@ export default function AllBookings() {
     const [bookings, setbookings] = useState([])
     const [allBookings, setallBookings] = useState(true)
     const [addBooking, setaddBooking] = useState(false)
+    let adminToken = localStorage.getItem('adminToken');
+
 
     async function getAllBookings() {
-        let Bookings = await fetch(BaseUrl + 'bookings');
+        let Bookings = await fetch(BaseUrl + 'admin/bookings', {
+            method: 'GET',
+            headers: {
+                'Content-type': 'Application/json',
+                "Authorization": `Bearer ${adminToken}`
+            }
+        });
+
         let allBookings = await Bookings.json();
-        if (allBookings) {
+        if (Bookings.status === 200) {
             setbookings(allBookings);
             console.log('All bookings ==>', allBookings);
         }
+        else alert(allBookings.message);
     }
 
     $(document).ready(function () {
@@ -46,11 +56,12 @@ export default function AllBookings() {
         let total = document.getElementById('total' + booked_bikes_id).innerHTML;
         let payment_status = document.getElementById('payment_status' + booked_bikes_id).innerHTML;
 
-        let bookingUpdate = await fetch(BaseUrl + 'bookings/updatebooking', {
+        let bookingUpdate = await fetch(BaseUrl + 'admin/bookings/updatebooking', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                "Authorization": `Bearer ${adminToken}`
             },
             body: JSON.stringify({
                 booked_bikes_id: booked_bikes_id, bikeId: bikeId, userId: userId, booked_from: booked_from, booked_till: booked_till,
@@ -62,15 +73,23 @@ export default function AllBookings() {
         if (bookingUpdate.status === 200) {
             alert('Updated');
         }
+        else alert(updated.message);
     }
 
     async function deleteRecord(e) {
         let bookingId = e.target.name;
-        let deleteBooking = await fetch(BaseUrl + `bookings/deletebooking/${bookingId}`, { method: "DELETE" });
+        let deleteBooking = await fetch(BaseUrl + `admin/bookings/deletebooking/${bookingId}`, {
+            method: "DELETE",
+            headers: {
+                'Content-type': 'Application/json',
+                "Authorization": `Bearer ${adminToken}`
+            }
+        });
         let deleted = await deleteBooking.json();
         if (deleteBooking.status === 200 && deleted.message === 'Deleted') {
             getAllBookings()
         }
+        else alert(deleted.message)
     }
 
     useEffect(() => {
@@ -83,18 +102,17 @@ export default function AllBookings() {
                 addBooking === true ?
                     <AddBooking /> :
 
-                    <section class="content" style={{ backgroundColor: 'white' }}>
+                    <section class="content" style={{ backgroundColor: 'white', marginRight: '15px' }}>
                         <div class="block-header" style={{ backgroundColor: '#f7f7f7', padding: '20px', borderRadius: '5px' }}>
                             <div class="row">
                                 <div class="col-lg-7 col-md-6 col-sm-12">
                                     <h2>Dashboard</h2>
                                     <ul class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="index.html"><i class="zmdi zmdi-home"></i> Aero</a></li>
-                                        <li class="breadcrumb-item active">Dashboard 1</li>
+                                        <li class="breadcrumb-item"><a href="index.html"><i class="zmdi zmdi-home"></i> ApnaBike</a></li>
+                                        <li class="breadcrumb-item active">Bookings</li>
                                     </ul>
-                                </div>
-                                <div class="col-lg-5 col-md-6 col-sm-12">
-                                    <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i class="zmdi zmdi-arrow-right"></i></button>
+                                    <button class="btn btn-primary btn-icon mobile_menu" type="button"><i class="zmdi zmdi-sort-amount-desc"></i></button>
+
                                 </div>
                             </div>
                         </div>

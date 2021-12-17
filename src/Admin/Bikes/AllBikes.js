@@ -11,16 +11,25 @@ export default function AllBikes(props) {
     const [addBikeComponent, setaddBikeComponent] = useState(false)
 
     const [bikes, setbikes] = useState([])
+    let adminToken = localStorage.getItem('adminToken');
+
     // const [allBikesComponent, setallBikesComponent] = useState(true)
 
     async function getAllBikes() {
-        let Bikes = await fetch(BaseUrl + 'bikes');
+        let Bikes = await fetch(BaseUrl + 'admin/bikes', {
+            method: 'GET',
+            headers: {
+                'Content-type': 'Application/json',
+                "Authorization": `Bearer ${adminToken}`
+            }
+        });
         let allBikes = await Bikes.json();
 
-        if (allBikes) {
+        if (Bikes.status === 200) {
             setbikes(allBikes);
             console.log(allBikes);
         }
+        else alert(allBikes.message);
     }
 
 
@@ -46,9 +55,6 @@ export default function AllBikes(props) {
         });
     });
 
-    // useEffect(() => {
-    //     getAllBikes();
-    // }, [])
 
     function addNewFunction() {
         setallBikesComponent(!allBikesComponent);
@@ -56,13 +62,19 @@ export default function AllBikes(props) {
     }
 
     async function getAllBikes() {
-        let Bikes = await fetch(BaseUrl + 'bikes');
+        let Bikes = await fetch(BaseUrl + 'admin/bikes', {
+            method: 'GET',
+            headers: {
+                'Content-type': 'Application/json',
+                "Authorization": `Bearer ${adminToken}`
+            }
+        });
         let allBikes = await Bikes.json();
 
-        if (allBikes) {
+        if (Bikes.status === 200) {
             setbikes(allBikes);
-            console.log(allBikes);
         }
+        else alert(allBikes.message);
     }
 
     async function updateFunction(e) {
@@ -74,11 +86,12 @@ export default function AllBikes(props) {
         let image = document.getElementById('image' + bikeId).innerHTML;
         let status = document.getElementById('status' + bikeId).innerHTML;
 
-        let bikeUpdate = await fetch(BaseUrl + 'bikes/updatebike', {
+        let bikeUpdate = await fetch(BaseUrl + 'admin/bikes/updatebike', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                "Authorization": `Bearer ${adminToken}`
             },
             body: JSON.stringify({
                 bikeId: bikeId, company: company, model: model, category, category,
@@ -86,19 +99,26 @@ export default function AllBikes(props) {
             })
         })
         let updated = bikeUpdate.json();
-
         if (bikeUpdate.status === 200 && updated.message === 'Updated') {
             alert('Updated');
         }
+        else alert(updated.message);
     }
 
     async function deleteRecord(e) {
         let bikeId = e.target.name;
-        let deleteBike = await fetch(BaseUrl + `bikes/deletebike/${bikeId}`, { method: "DELETE" });
+        let deleteBike = await fetch(BaseUrl + `admin/bikes/deletebike/${bikeId}`, {
+            method: "DELETE",
+            headers: {
+                'Content-type': 'Application/json',
+                "Authorization": `Bearer ${adminToken}`
+            }
+        });
         let deleted = await deleteBike.json();
         if (deleteBike.status === 200 && deleted.message == 'Deleted') {
             getAllBikes()
         }
+        else alert(deleted.message);
     }
 
 
@@ -109,72 +129,23 @@ export default function AllBikes(props) {
                 : null}
 
             {allBikesComponent === true ?
-                <section class="content">
-                    <div class="block-header mb-3">
+                <section class="content" style={{ backgroundColor: 'white', marginRight: '15px' }}>
+                    <div class="block-header mb-3" style={{ backgroundColor: '#f7f7f7', padding: '20px', borderRadius: '5px' }}>
                         <div class="row">
                             <div class="col-lg-7 col-md-6 col-sm-12">
                                 <h2>Dashboard</h2>
                                 <ul class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.html"><i class="zmdi zmdi-home"></i> Aero</a></li>
-                                    <li class="breadcrumb-item active">Dashboard 1</li>
+                                    <li class="breadcrumb-item"><a href="index.html"><i class="zmdi zmdi-home"></i> ApnaBike</a></li>
+                                    <li class="breadcrumb-item active">Bikes</li>
                                 </ul>
+                                <button class="btn btn-primary btn-icon mobile_menu" type="button"><i class="zmdi zmdi-sort-amount-desc"></i></button>
+
                             </div>
-                            <div class="col-lg-5 col-md-6 col-sm-12">
-                                <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i class="zmdi zmdi-arrow-right"></i></button>
-                            </div>
+
                         </div>
                     </div>
-                    <div class="body_scroll ">
-                        <div class="container-fluid pageHeaderBlocks">
-                            <div class="row clearfix">
-                                <div class="col-lg-3 col-md-6 col-sm-12">
-                                    <div class="card widget_2 big_icon traffic">
-                                        <div class="body">
-                                            <h6>Traffic</h6>
-                                            <h3>20 <small class="info">of 1Tb</small></h3>
-                                            <small>2% higher than last month</small>
-                                            <div class="progress">
-                                                <div class="progress-bar l-amber" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style={{ width: "45%" }}></div>                        </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-6 col-sm-12">
-                                    <div class="card widget_2 big_icon sales">
-                                        <div class="body">
-                                            <h6>Sales</h6>
-                                            <h3>12% <small class="info">of 100</small></h3>
-                                            <small>6% higher than last month</small>
-                                            <div class="progress">
-                                                <div class="progress-bar l-blue" role="progressbar" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100" style={{ width: "38%;" }}></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-6 col-sm-12">
-                                    <div class="card widget_2 big_icon email">
-                                        <div class="body">
-                                            <h6>Email</h6>
-                                            <h3>39 <small class="info">of 100</small></h3>
-                                            <small>Total Registered email</small>
-                                            <div class="progress">
-                                                <div class="progress-bar l-purple" role="progressbar" aria-valuenow="39" aria-valuemin="0" aria-valuemax="100" style={{ width: "39%;" }}></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-6 col-sm-12">
-                                    <div class="card widget_2 big_icon domains">
-                                        <div class="body">
-                                            <h6>Domains</h6>
-                                            <h3>8 <small class="info">of 10</small></h3>
-                                            <small>Total Registered Domain</small>
-                                            <div class="progress">
-                                                <div class="progress-bar l-green" role="progressbar" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100" style={{ width: "89%" }}></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="container-fluid">
+                        <div class="body_scroll ">
                             <div class="body">
                                 <div id="chart-area-spline-sracked" class="c3_chart d_sales"></div>
                             </div>

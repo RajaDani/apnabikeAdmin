@@ -9,6 +9,7 @@ const AddUser = () => {
 
     const [allUsers, setallUsers] = useState(false)
     const [addUser, setaddUsers] = useState(true)
+    let adminToken = localStorage.getItem('adminToken');
 
     async function submitHandler(e) {
 
@@ -25,11 +26,12 @@ const AddUser = () => {
 
         let password = md5(pass);
 
-        let user = await fetch(BaseUrl + 'users', {
+        let user = await fetch(BaseUrl + 'admin/users', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${adminToken}`
             },
             body: JSON.stringify({
                 firstname: firstname, lastname: lastname, username: username
@@ -46,25 +48,19 @@ const AddUser = () => {
         else alert(newUser.message);
     }
 
-
     return (
         <>
             {
                 allUsers === true ?
                     <Users /> :
 
-                    <section class="content" style={{ backgroundColor: 'white' }}>
+                    <section class="content" style={{ backgroundColor: 'white', marginRight: '15px' }}>
                         <div class="block-header" style={{ backgroundColor: '#f7f7f7', padding: '20px', borderRadius: '5px' }}>
                             <div class="row">
                                 <div class="col-lg-7 col-md-6 col-sm-12">
-                                    <h2>Dashboard</h2>
-                                    <ul class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="index.html"><i class="zmdi zmdi-home"></i> Aero</a></li>
-                                        <li class="breadcrumb-item active">Dashboard 1</li>
-                                    </ul>
-                                </div>
-                                <div class="col-lg-5 col-md-6 col-sm-12">
-                                    <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i class="zmdi zmdi-arrow-right"></i></button>
+                                    <h2 className="font-size-16 mb-1">Add New User</h2>
+                                    <p className="text-muted text-truncate mt-1 mb-0">Fill all information below</p>
+
                                 </div>
                             </div>
                         </div>
@@ -74,15 +70,10 @@ const AddUser = () => {
                                 <Col lg="12">
                                     <div id="addproduct-accordion" className="custom-accordion mt-1">
                                         <Card>
-                                            <div className="p-4">
-                                                <div className="d-flex align-items-center">
-                                                    <div className="flex-grow-1 overflow-hidden">
-                                                        <h5 className="font-size-16 mb-1">Add New User</h5>
-                                                        <p className="text-muted text-truncate mb-0">Fill all information below</p>
-                                                    </div>
-                                                </div>
+                                            <div className="p-1">
+
                                             </div>
-                                            <div className="p-4 border-top">
+                                            <div className="p-4">
                                                 <Form onSubmit={(e) => submitHandler(e)}>
 
                                                     <Row>

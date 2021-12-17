@@ -3,7 +3,6 @@ import { BaseUrl } from '../BaseUrl';
 import { Card, Col, Container, Form, Input, Label, Row, } from "reactstrap";
 import AddRent from "./AddRent";
 
-
 const AddBike = () => {
 
   const [rentComponent, setrentComponent] = useState(false)
@@ -13,6 +12,7 @@ const AddBike = () => {
   async function submitHandler(e) {
 
     e.preventDefault();
+    let adminToken = localStorage.getItem('adminToken');
 
     let company = document.getElementById('company').value;
     let city = document.getElementById('city').value;
@@ -21,11 +21,12 @@ const AddBike = () => {
     let status = document.getElementById('status').value;
     let image = document.getElementById('image').files[0].name;
 
-    let bike = await fetch(BaseUrl + 'bikes/addbike', {
+    let bike = await fetch(BaseUrl + 'admin/bikes/addbike', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${adminToken}`
       },
       body: JSON.stringify({ company: company, category: '125cc', city: city, model: model, chasis_no: chasis_no, status: status, image: image })
     });
@@ -50,18 +51,14 @@ const AddBike = () => {
 
       {addBikeComponent === true ?
         <Container fluid >
-          <section class="content" style={{ backgroundColor: 'white' }}>
+          <section class="content" style={{ backgroundColor: 'white', marginRight: '15px' }}>
             <div class="block-header" style={{ backgroundColor: '#f7f7f7', padding: '20px', borderRadius: '5px' }}>
               <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
-                  <h2>Bikes</h2>
-                  <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html"><i class="zmdi zmdi-home"></i> ApnaBike</a></li>
-                    <li class="breadcrumb-item active">Add Bike</li>
-                  </ul>
-                </div>
-                <div class="col-lg-5 col-md-6 col-sm-12">
-                  <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i class="zmdi zmdi-arrow-right"></i></button>
+                  <h2 className="font-size-16 mb-1">Add New Bike</h2>
+                  <p className="text-muted text-truncate mt-1 mb-0">Fill all information below</p>
+                  <button class="btn btn-primary btn-icon mobile_menu" type="button"><i class="zmdi zmdi-sort-amount-desc"></i></button>
+
                 </div>
               </div>
             </div>
@@ -70,15 +67,10 @@ const AddBike = () => {
                 <Col lg="12">
                   <div id="addproduct-accordion" className="custom-accordion mt-1" >
                     <Card>
-                      <div className="p-4">
-                        <div className="d-flex align-items-center">
-                          <div className="flex-grow-1 overflow-hidden">
-                            <h5 className="font-size-16 mb-1">Add New Bike</h5>
-                            <p className="text-muted text-truncate mb-0">Fill all information below</p>
-                          </div>
-                        </div>
+                      <div className="p-1">
+
                       </div>
-                      <div className="p-4 border-top">
+                      <div className="p-4">
                         <Form onSubmit={(e) => submitHandler(e)}>
                           <div className="mb-3">
                             <Label htmlFor="productname">Company Name</Label>

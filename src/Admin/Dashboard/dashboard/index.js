@@ -3,7 +3,6 @@ import { Container, Row, Col, Table } from "reactstrap";
 import '../../sidebarStyle.scss'
 import { BaseUrl } from '../../BaseUrl';
 
-
 //Import Components
 import MiniWidget from "./mini-widget";
 import SalesAnalyticsChart from "./salesanalytics-chart";
@@ -166,8 +165,11 @@ const options4 = {
 const Dashboard = () => {
 
   const [totalBikes, settotalBikes] = useState()
+  const [totalOrders, settotalOrders] = useState()
+  const [totalUsers, settotalUsers] = useState()
+  let adminToken = localStorage.getItem('adminToken');
 
-  const reports = [
+  var reports = [
     {
       id: 1,
       icon: "mdi mdi-arrow-up-bold",
@@ -190,7 +192,7 @@ const Dashboard = () => {
       id: 2,
       icon: "mdi mdi-arrow-down-bold",
       title: "Orders",
-      value: 5643,
+      value: totalOrders,
       decimal: 0,
       charttype: "radialBar",
       chartheight: 45,
@@ -207,7 +209,7 @@ const Dashboard = () => {
       id: 3,
       icon: "mdi mdi-arrow-down-bold",
       title: "Customers",
-      value: 45254,
+      value: totalUsers,
       decimal: 0,
       prefix: "",
       suffix: "",
@@ -224,7 +226,7 @@ const Dashboard = () => {
       id: 4,
       icon: "mdi mdi-arrow-up-bold",
       title: "Growth",
-      value: 12.58,
+      value: 2.48,
       decimal: 2,
       prefix: "+",
       suffix: "%",
@@ -239,66 +241,50 @@ const Dashboard = () => {
     },
   ];
 
-  const getTotalBikes = async () => {
-    let total = await fetch(BaseUrl + 'bikes/totalbikes');
+  const getAllData = async () => {
+    let total = await fetch(BaseUrl + 'admin/dashboard/getAllDashboardData', {
+      method: 'GET',
+      headers: {
+        'Content-type': 'Application/json',
+        "Authorization": `Bearer ${adminToken}`
+      }
+    });
+
     let result = await total.json();
     if (total.status === 200) {
-      console.log(result.totalBikes);
-      settotalBikes(result.totalBikes);
+      console.log(result);
+      settotalBikes(result.bike);
+      settotalOrders(result.orders);
+      settotalUsers(result.users);
     }
+    else alert(result.message);
   }
 
-  const getTotalCustomers = () => {
-
-  }
-
-  const getTotalBookings = () => {
-
-  }
 
   useEffect(() => {
-    getTotalBikes();
-    getTotalCustomers();
-    getTotalBookings();
-
-    setTimeout(() => {
-      console.table(reports)
-    }, 2000)
+    getAllData();
   }, [])
 
   return (
     <React.Fragment>
-      {/* <div className="dashboardOuter">
-        <div className="page-content"> */}
       <Container fluid>
         <Row className="mt-4">
-          <MiniWidget reports={reports} />
+          {totalBikes, totalOrders, totalUsers &&
+            <MiniWidget reports={reports} />
+          }
         </Row>
 
-        <Row>
+        <Row className="mt-5 mb-5">
           <Col xl={8}>
             <SalesAnalyticsChart />
           </Col>
           <Col xl={4}>
-
-            <TopProduct />
+            <TopProduct bikes={totalBikes} orders={totalOrders} users={totalUsers} />
           </Col>
         </Row>
-        {/* <Row>
-            <Col xl={4}>
-              <TopUser />
-            </Col>
-            <Col xl={4}>
-              <RecentActivity />
-            </Col>
-            <Col xl={4}>
-              <SocialSource />
-            </Col>
-          </Row> */}
         <LatestTransaction />
       </Container>
-      {/* </div>
-      </div > */}
+
     </React.Fragment >
   );
 };

@@ -26,7 +26,7 @@ export default function Calender() {
 
     return (
         <>
-            <section class="content page-calendar">
+            <section class="content page-calendar" style={{ marginRight: '15px' }}>
                 <div class="body_scroll">
                     <div class="block-header">
                         <div class="row">
@@ -37,10 +37,93 @@ export default function Calender() {
                                     <li class="breadcrumb-item"><a href="javascript:void(0);">App</a></li>
                                     <li class="breadcrumb-item active">Calendar</li>
                                 </ul>
+                                <button class="btn btn-primary btn-icon mobile_menu" type="button"><i class="zmdi zmdi-sort-amount-desc"></i></button>
+
                             </div>
-                            <div class="col-lg-5 col-md-6 col-sm-12">
-                                <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i class="zmdi zmdi-arrow-right"></i></button>
+                            {/* <div class="col-lg-5 col-md-6 col-sm-12"> */}
+                            <div class="navbar-right">
+                                <ul class="navbar-nav">
+                                    <li><a href="javascript:void(0);" class="js-right-sidebar" title="Setting"><i class="zmdi zmdi-settings zmdi-hc-spin"></i></a></li>
+                                </ul>
                             </div>
+                            <aside id="rightsidebar" class="right-sidebar"  >
+                                <ul class="nav nav-tabs sm">
+                                    <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#setting"><i class="zmdi zmdi-settings zmdi-hc-spin"></i></a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#chat"><i class="zmdi zmdi-comments"></i></a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="setting">
+                                        <div class="slim_scroll">
+                                            <div class="card">
+                                                <h6>Theme Option</h6>
+                                                <div class="light_dark">
+                                                    <div class="radio">
+                                                        <input type="radio" name="radio1" id="lighttheme" value="light" checked="" />
+                                                        <label for="lighttheme">Light Mode</label>
+                                                    </div>
+                                                    <div class="radio mb-0">
+                                                        <input type="radio" name="radio1" id="darktheme" value="dark" />
+                                                        <label for="darktheme">Dark Mode</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card">
+                                                <h6>Color Skins</h6>
+                                                <ul class="choose-skin list-unstyled">
+                                                    <li data-theme="purple"><div class="purple"></div></li>
+                                                    <li data-theme="blue"><div class="blue"></div></li>
+                                                    <li data-theme="cyan"><div class="cyan"></div></li>
+                                                    <li data-theme="green"><div class="green"></div></li>
+                                                    <li data-theme="orange"><div class="orange"></div></li>
+                                                    <li data-theme="blush" class="active"><div class="blush"></div></li>
+                                                </ul>
+                                            </div>
+                                            <div class="card">
+                                                <h6>General Settings</h6>
+                                                <ul class="setting-list list-unstyled">
+                                                    <li>
+                                                        <div class="checkbox rtl_support">
+                                                            <input id="checkbox1" type="checkbox" value="rtl_view" />
+                                                            <label for="checkbox1">RTL Version</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="checkbox ms_bar">
+                                                            <input id="checkbox2" type="checkbox" value="mini_active" />
+                                                            <label for="checkbox2">Mini Sidebar</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="checkbox">
+                                                            <input id="checkbox3" type="checkbox" checked="" />
+                                                            <label for="checkbox3">Notifications</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="checkbox">
+                                                            <input id="checkbox4" type="checkbox" />
+                                                            <label for="checkbox4">Auto Updates</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="checkbox">
+                                                            <input id="checkbox5" type="checkbox" checked="" />
+                                                            <label for="checkbox5">Offline</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="checkbox">
+                                                            <input id="checkbox6" type="checkbox" checked="" />
+                                                            <label for="checkbox6">Location Permission</label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </aside>
+                            {/* </div> */}
                         </div>
                     </div>
                     <div class="container-fluid">
@@ -63,17 +146,17 @@ export default function Calender() {
                                         <button type="button" class="btn btn-info btn-block waves-effect" data-toggle="modal" data-target="#addNewEvent">Add Events</button>
                                         <div class="e_list">
                                             <h5 class="e_name">11 September <span class="badge badge-primary float-right">Conference</span></h5>
-                                            <address><i class="zmdi zmdi-pin"></i> 123 6th St. Melbourne, FL 32904</address>
+                                            <address><i class="zmdi zmdi-pin"></i> 123 6th St.Melbourne, FL 32904</address>
                                             <p class="e_details">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                                         </div>
                                         <div class="e_list">
                                             <h5 class="e_name">12 November <span class="badge badge-success float-right">Birthday Party</span></h5>
-                                            <address><i class="zmdi zmdi-pin"></i> 123 6th St. Melbourne, FL 32904</address>
+                                            <address><i class="zmdi zmdi-pin"></i> 123 6th St.Melbourne, FL 32904</address>
                                             <p class="e_details">It is a long established fact that a reader will be distracted</p>
                                         </div>
                                         <div class="e_list">
                                             <h5 class="e_name">16 December <span class="badge badge-danger float-right">Repeating</span></h5>
-                                            <address><i class="zmdi zmdi-pin"></i> 123 6th St. Melbourne, FL 32904</address>
+                                            <address><i class="zmdi zmdi-pin"></i> 123 6th St.Melbourne, FL 32904</address>
                                             <p class="e_details">Contrary to popular belief, Lorem Ipsum is not simply random text.</p>
                                         </div>
                                     </div>

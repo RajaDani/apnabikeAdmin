@@ -20,6 +20,8 @@ const AddBooking = () => {
     const [availableBikes, setavailableBikes] = useState([])
     const [category, setcategory] = useState('');
     const [user, setUser] = useState(true);
+    let userId;
+    let adminToken = localStorage.getItem('adminToken');
 
 
     async function selectedCity(e) {
@@ -32,6 +34,7 @@ const AddBooking = () => {
             setavailableBikes(allBikes);
             console.log(allBikes);
         }
+        else alert(allBikes.message);
     }
 
     function selectedCategory(e) {
@@ -54,16 +57,15 @@ const AddBooking = () => {
         let total = document.getElementById('total').value;
         let payment_status = document.getElementById('payment_status').value;
 
-        alert(bikeId);
-
-        let bookedBike = await fetch(BaseUrl + 'bookings/addbooking', {
+        let bookedBike = await fetch(BaseUrl + 'admin/bookings/addbooking', {
             method: "POST",
             headers: {
                 'Accept': 'application/json',
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                "Authorization": `Bearer ${adminToken}`
             },
             body: JSON.stringify({
-                city: city, bikeId: bikeId, book_from: book_from, userId: '1',
+                city: city, bikeId: bikeId, book_from: book_from, userId: userId,
                 book_till: book_till, total: total, payment_status: payment_status
             })
         });
@@ -74,17 +76,24 @@ const AddBooking = () => {
             setaddBooking(!addBooking);
             setallBookings(!allBookings);
         }
-
+        else alert(result.message)
     }
 
     async function verifyUser() {
         let mobile = document.getElementById('mobile').value;
-        let verify = await fetch(BaseUrl + `users/verifyuser/${mobile}`);
+        let verify = await fetch(BaseUrl + `admin/users/verifyuser/${mobile}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'Application/json',
+                "Authorization": `Bearer ${adminToken}`
+            }
+        });
         let result = await verify.json();
 
         if (verify.status === 200 && result.message === 'User verified') {
             document.getElementById('userinfo').innerHTML = '';
             setUser(true);
+            userId = result.user;
         }
         else {
             document.getElementById('userinfo').innerHTML = 'User not found';
@@ -98,18 +107,14 @@ const AddBooking = () => {
                 addBooking === true ?
 
                     <Container fluid>
-                        <section class="content" style={{ backgroundColor: 'white' }}>
+                        <section class="content" style={{ backgroundColor: 'white', marginRight: '15px' }}>
                             <div class="block-header" style={{ backgroundColor: '#f7f7f7', padding: '20px', borderRadius: '5px' }}>
                                 <div class="row">
                                     <div class="col-lg-7 col-md-6 col-sm-12">
-                                        <h2>Dashboard</h2>
-                                        <ul class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="index.html"><i class="zmdi zmdi-home"></i> Aero</a></li>
-                                            <li class="breadcrumb-item active">Dashboard 1</li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-lg-5 col-md-6 col-sm-12">
-                                        <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i class="zmdi zmdi-arrow-right"></i></button>
+                                        <h2 className="font-size-16 mb-1">Add New Booking</h2>
+                                        <p className="text-muted text-truncate mt-1 mb-0">Fill all information below</p>
+                                        <button class="btn btn-primary btn-icon mobile_menu" type="button"><i class="zmdi zmdi-sort-amount-desc"></i></button>
+
                                     </div>
                                 </div>
                             </div>
@@ -119,15 +124,10 @@ const AddBooking = () => {
                                     <Col lg="12">
                                         <div id="addproduct-accordion" className="custom-accordion mt-1">
                                             <Card>
-                                                <div className="p-4">
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="flex-grow-1 overflow-hidden">
-                                                            <h5 className="font-size-16 mb-1">Add New Booking</h5>
-                                                            <p className="text-muted text-truncate mb-0">Fill all information below</p>
-                                                        </div>
-                                                    </div>
+                                                <div className="p-1">
+
                                                 </div>
-                                                <div className="p-4 border-top">
+                                                <div className="p-4">
                                                     <Form id="form" onSubmit={() => submitHandler()}>
 
                                                         <Row>
