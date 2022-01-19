@@ -1,173 +1,178 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Table } from "reactstrap";
-import '../../sidebarStyle.scss'
-import { BaseUrl } from '../../BaseUrl';
+import "../../sidebarStyle.scss";
+import { BaseUrl } from "../../BaseUrl";
 
 //Import Components
 import MiniWidget from "./mini-widget";
 import SalesAnalyticsChart from "./salesanalytics-chart";
 import TopProduct from "./topselling-product";
 import LatestTransaction from "./latest-transaction";
+import { SessionExpiredAlert } from "../../Sweetalert";
+import { useHistory } from "react-router-dom";
 
 //Import Image
 
-const series1 = [{
-  data: [25, 66, 41, 89, 63, 25, 44, 20, 36, 40, 54]
-}];
+const series1 = [
+  {
+    data: [25, 66, 41, 89, 63, 25, 44, 20, 36, 40, 54],
+  },
+];
 
 const options1 = {
   fill: {
-    colors: ['#5b73e8']
+    colors: ["#5b73e8"],
   },
   chart: {
     width: 70,
     sparkline: {
-      enabled: !0
-    }
+      enabled: !0,
+    },
   },
   plotOptions: {
     bar: {
-      columnWidth: '50%'
-    }
+      columnWidth: "50%",
+    },
   },
   labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   xaxis: {
     crosshairs: {
-      width: 1
+      width: 1,
     },
   },
   tooltip: {
     fixed: {
-      enabled: !1
+      enabled: !1,
     },
     x: {
-      show: !1
+      show: !1,
     },
     y: {
       title: {
         formatter: function (seriesName) {
-          return '';
-        }
-      }
+          return "";
+        },
+      },
     },
     marker: {
-      show: !1
-    }
-  }
+      show: !1,
+    },
+  },
 };
 
 const series2 = [70];
 
 const options2 = {
   fill: {
-    colors: ['#34c38f']
+    colors: ["#34c38f"],
   },
   chart: {
     sparkline: {
-      enabled: !0
-    }
+      enabled: !0,
+    },
   },
   dataLabels: {
-    enabled: !1
+    enabled: !1,
   },
   plotOptions: {
     radialBar: {
       hollow: {
         margin: 0,
-        size: '60%'
+        size: "60%",
       },
       track: {
-        margin: 0
+        margin: 0,
       },
       dataLabels: {
-        show: !1
-      }
-    }
-  }
+        show: !1,
+      },
+    },
+  },
 };
 
 const series3 = [55];
 
 const options3 = {
   fill: {
-    colors: ['#5b73e8']
+    colors: ["#5b73e8"],
   },
   chart: {
     sparkline: {
-      enabled: !0
-    }
+      enabled: !0,
+    },
   },
   dataLabels: {
-    enabled: !1
+    enabled: !1,
   },
   plotOptions: {
     radialBar: {
       hollow: {
         margin: 0,
-        size: '60%'
+        size: "60%",
       },
       track: {
-        margin: 0
+        margin: 0,
       },
       dataLabels: {
-        show: !1
-      }
-    }
-  }
+        show: !1,
+      },
+    },
+  },
 };
 
-const series4 = [{
-  data: [25, 66, 41, 89, 63, 25, 44, 12, 36, 9, 54]
-}];
+const series4 = [
+  {
+    data: [25, 66, 41, 89, 63, 25, 44, 12, 36, 9, 54],
+  },
+];
 
 const options4 = {
-
   fill: {
-    colors: ['#f1b44c']
+    colors: ["#f1b44c"],
   },
   chart: {
     width: 70,
     sparkline: {
-      enabled: !0
-    }
+      enabled: !0,
+    },
   },
   plotOptions: {
     bar: {
-      columnWidth: '50%'
-    }
+      columnWidth: "50%",
+    },
   },
   labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   xaxis: {
     crosshairs: {
-      width: 1
+      width: 1,
     },
   },
   tooltip: {
     fixed: {
-      enabled: !1
+      enabled: !1,
     },
     x: {
-      show: !1
+      show: !1,
     },
     y: {
       title: {
         formatter: function (seriesName) {
-          return '';
-        }
-      }
+          return "";
+        },
+      },
     },
     marker: {
-      show: !1
-    }
-  }
+      show: !1,
+    },
+  },
 };
 
 const Dashboard = () => {
-
-  const [totalBikes, settotalBikes] = useState()
-  const [totalOrders, settotalOrders] = useState()
-  const [totalUsers, settotalUsers] = useState()
-  let adminToken = localStorage.getItem('adminToken');
+  const [totalBikes, settotalBikes] = useState();
+  const [totalOrders, settotalOrders] = useState();
+  const [totalUsers, settotalUsers] = useState();
+  let adminToken = localStorage.getItem("adminToken");
+  let history = useHistory();
 
   var reports = [
     {
@@ -186,7 +191,6 @@ const Dashboard = () => {
       desc: "since last week",
       series: series1,
       options: options1,
-
     },
     {
       id: 2,
@@ -242,35 +246,38 @@ const Dashboard = () => {
   ];
 
   const getAllData = async () => {
-    let total = await fetch(BaseUrl + 'admin/dashboard/getAllDashboardData', {
-      method: 'GET',
+    let total = await fetch(BaseUrl + "admin/dashboard/getAllDashboardData", {
+      method: "GET",
       headers: {
-        'Content-type': 'Application/json',
-        "Authorization": `Bearer ${adminToken}`
-      }
+        "Content-type": "Application/json",
+        Authorization: `Bearer ${adminToken}`,
+      },
     });
 
     let result = await total.json();
     if (total.status === 200) {
-      console.log(result);
       settotalBikes(result.bike);
       settotalOrders(result.orders);
       settotalUsers(result.users);
-    }
-    else alert(result.message);
-  }
-
+    } else if (total.status === 440) {
+      SessionExpiredAlert();
+      localStorage.clear();
+      history.push("login");
+    } else alert(total.message);
+  };
 
   useEffect(() => {
     getAllData();
-  }, [])
+  }, []);
 
   return (
     <React.Fragment>
       <Container fluid>
         <Row className="mt-4">
-          {totalBikes, totalOrders, totalUsers &&
-            <MiniWidget reports={reports} />
+          {
+            (totalBikes,
+            totalOrders,
+            totalUsers && <MiniWidget reports={reports} />)
           }
         </Row>
 
@@ -279,13 +286,16 @@ const Dashboard = () => {
             <SalesAnalyticsChart />
           </Col>
           <Col xl={4}>
-            <TopProduct bikes={totalBikes} orders={totalOrders} users={totalUsers} />
+            <TopProduct
+              bikes={totalBikes}
+              orders={totalOrders}
+              users={totalUsers}
+            />
           </Col>
         </Row>
         <LatestTransaction />
       </Container>
-
-    </React.Fragment >
+    </React.Fragment>
   );
 };
 

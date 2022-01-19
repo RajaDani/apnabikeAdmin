@@ -1,91 +1,93 @@
 import React, { useState } from "react";
+import AllBikes from "./AllBikes";
 import { BaseUrl } from "../BaseUrl";
 import { Card, Col, Container, Form, Input, Label, Row } from "reactstrap";
-import AddRent from "./AddRent";
-import AllBikes from "./AllBikes";
 import { SessionExpiredAlert } from "../Sweetalert";
 import { useHistory } from "react-router-dom";
 
-const AddBike = () => {
-  const [rentComponent, setrentComponent] = useState(false);
-  const [addBikeComponent, setaddBikeComponent] = useState(true);
-  const [allBikes, setallBikes] = useState(false);
-  const [bikeId, setbikeId] = useState("");
+export default function UpdateBike(props) {
+  const [updateBike, setupdateBike] = useState(true);
+  const [allbikes, setallbikes] = useState(false);
+  const [company, setcompany] = useState(props.bikeData[1]);
+  const [model, setmodel] = useState(props.bikeData[2]);
+  const [category, setcategory] = useState(props.bikeData[3]);
+  const [chasis_no, setchasis_no] = useState(props.bikeData[4]);
+  const [image, setimage] = useState(props.bikeData[5]);
+  const [status, setstatus] = useState(props.bikeData[6]);
+
+  let bikeId = props.bikeData[0];
   let history = useHistory();
 
   async function submitHandler(e) {
     e.preventDefault();
     let adminToken = localStorage.getItem("adminToken");
-
-    let company = document.getElementById("company").value;
-    let city = document.getElementById("city").value;
-    let model = document.getElementById("model").value;
-    let chasis_no = document.getElementById("chasis_no").value;
-    let status = document.getElementById("status").value;
-    let category = document.getElementById("category").value;
-    let image = document.getElementById("image").files[0];
-    let imageName = document.getElementById("image").files[0].name;
-
-    let formData = new FormData();
-    formData.append("image", image);
-    formData.append("filename", imageName);
-
-    for (var key of formData.entries()) {
-      console.log(key[0] + ", " + key[1]);
-    }
-
-    let bike = await fetch(BaseUrl + "admin/bikes/addbike", {
-      method: "POST",
+    let bikeUpdate = await fetch(BaseUrl + "admin/bikes/updatebike", {
+      method: "PUT",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json",
+        "Content-type": "application/json",
         Authorization: `Bearer ${adminToken}`,
       },
       body: JSON.stringify({
+        bikeId: bikeId,
         company: company,
-        category: category,
-        city: city,
         model: model,
+        category,
+        category,
         chasis_no: chasis_no,
+        image: image,
         status: status,
-        image: imageName,
       }),
     });
-
-    let newBike = await bike.json();
-
-    if (bike.status === 200 && newBike.message == "Bike Added") {
-      console.log(newBike);
-      console.log("bikeId", newBike.bikesData.bike_id);
-
-      let bikeImg = await fetch(BaseUrl + "admin/bikes/addbike/bikeimage", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (bikeImg.status === 200) {
-        setbikeId(newBike.bikesData.bike_id);
-        setaddBikeComponent(!addBikeComponent);
-        setrentComponent(!rentComponent);
-      }
-    } else if (bike.status === 440) {
+    let updated = bikeUpdate.json();
+    if (bikeUpdate.status === 200 && updated.message === "Updated") {
+      alert("Updated");
+      setupdateBike(!updateBike);
+      setallbikes(!allbikes);
+    } else if (bikeUpdate.status === 440) {
       SessionExpiredAlert();
       localStorage.clear();
       history.push("login");
-    } else alert(bike.message);
+    } else alert(bikeUpdate.message);
+  }
+
+  function changeHandler(e) {
+    let name = e.target.name;
+    switch (name) {
+      case "company":
+        setcompany(e.target.value);
+        break;
+      case "model":
+        setmodel(e.target.value);
+        break;
+      case "category":
+        setcategory(e.target.value);
+        break;
+      case "chasis_no":
+        setchasis_no(e.target.value);
+        break;
+      case "status":
+        setstatus(e.target.value);
+        break;
+      case "image":
+        let newimage = document.getElementById("image").files[0].name;
+        setimage(newimage);
+        break;
+      default:
+        break;
+    }
   }
 
   function cancelBtn() {
-    setaddBikeComponent(!addBikeComponent);
-    setallBikes(!allBikes);
+    setupdateBike(!updateBike);
+    setallbikes(!allbikes);
   }
 
   return (
     <React.Fragment>
-      {rentComponent === true ? <AddRent bikeId={bikeId} /> : null}
-      {allBikes === true ? <AllBikes /> : null}
+      {allbikes === true ? <AllBikes /> : null}
 
-      {addBikeComponent === true ? (
+      {updateBike === true ? (
         <Container fluid>
           <section
             class="content"
@@ -101,9 +103,9 @@ const AddBike = () => {
             >
               <div class="row">
                 <div class="col-lg-7 col-md-6 col-sm-12">
-                  <h2 className="font-size-16 mb-1">Add New Bike</h2>
+                  <h2 className="font-size-16 mb-1">Update Bike</h2>
                   <p className="text-muted text-truncate mt-1 mb-0">
-                    Fill all information below
+                    Update information below
                   </p>
                   <button
                     class="btn btn-primary btn-icon mobile_menu"
@@ -128,49 +130,35 @@ const AddBike = () => {
                           <div className="mb-3">
                             <Label htmlFor="productname">Company Name</Label>
                             <input
-                              id="company"
-                              placeholder="Company Name"
+                              name="company"
+                              value={company}
                               type="text"
                               className="form-control"
+                              onChange={(e) => changeHandler(e)}
                             />
                           </div>
-                          <Row>
-                            <Col md="6">
-                              <div className="mb-3">
-                                <Label className="control-label">City</Label>
-                                <select className="form-control" id="city">
-                                  <option>Select</option>
-                                  <option>Chakwal</option>
-                                  <option>Rawalpindi</option>
-                                  <option>Islamabad</option>
-                                  <option>Karachi</option>
-                                  <option>Peshawar</option>
-                                </select>
-                              </div>
-                            </Col>
-                            <Col md="6">
-                              <div className="mb-3">
-                                <Label htmlFor="category">Category</Label>
-                                <select className="form-control" id="category">
-                                  <option>Select</option>
-                                  <option>70cc</option>
-                                  <option>100cc</option>
-                                  <option>125cc</option>
-                                  <option>150cc</option>
-                                  <option>200cc</option>
-                                </select>
-                              </div>
-                            </Col>
-                          </Row>
+
+                          <div className="mb-3">
+                            <Label htmlFor="productname">Category</Label>
+                            <input
+                              name="category"
+                              value={category}
+                              type="text"
+                              className="form-control"
+                              onChange={(e) => changeHandler(e)}
+                            />
+                          </div>
+
                           <Row>
                             <Col lg="4">
                               <div className="mb-3">
                                 <Label htmlFor="manufacturername">Model</Label>
                                 <input
-                                  id="model"
+                                  name="model"
                                   type="text"
-                                  placeholder="Model"
+                                  value={model}
                                   className="form-control"
+                                  onChange={(e) => changeHandler(e)}
                                 />
                               </div>
                             </Col>
@@ -180,20 +168,24 @@ const AddBike = () => {
                                   Chasis_no
                                 </Label>
                                 <input
-                                  id="chasis_no"
+                                  name="chasis_no"
                                   type="text"
-                                  placeholder="Chasis No"
+                                  value={chasis_no}
                                   className="form-control"
+                                  onChange={(e) => changeHandler(e)}
                                 />
                               </div>
                             </Col>
 
                             <Col lg="4">
                               <div className="mb-3">
-                                <Label htmlFor="price">Status</Label>
-                                <select className="form-control" id="status">
-                                  <option>Select</option>
-                                  <option>0</option>
+                                <Label htmlFor="status">Status</Label>
+                                <select
+                                  onSelect={(e) => changeHandler(e)}
+                                  className="form-control"
+                                  id="status"
+                                >
+                                  <option>{status}</option>
                                   <option>1</option>
                                 </select>
                               </div>
@@ -207,7 +199,9 @@ const AddBike = () => {
                                   Select Image
                                 </Label>
                                 <input
+                                  onSelect={(e) => changeHandler(e)}
                                   type="file"
+                                  name="image"
                                   id="image"
                                   className="form-control p-1"
                                   accept="image/*"
@@ -239,7 +233,7 @@ const AddBike = () => {
                               className="btn btn-success buttons"
                             >
                               {" "}
-                              <i className="zmdi zmdi-assignment"></i> Save{" "}
+                              <i className="zmdi zmdi-assignment"></i> Update{" "}
                             </button>
                           </div>
                         </Form>
@@ -254,6 +248,4 @@ const AddBike = () => {
       ) : null}
     </React.Fragment>
   );
-};
-
-export default AddBike;
+}
