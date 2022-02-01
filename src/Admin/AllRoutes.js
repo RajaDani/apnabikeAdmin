@@ -20,7 +20,6 @@ export default function AllRoutes() {
       <Switch>
         <Route exact path="/">
           <Sidebar />
-          {/* <RightSidebar /> */}
           <Admin />
         </Route>
         <Route exact path="/login">
@@ -31,22 +30,18 @@ export default function AllRoutes() {
         </Route>
         <Route exact path="/admin">
           <Sidebar />
-          {/* <RightSidebar /> */}
           <Admin />
         </Route>
         <Route exact path="/adminbikes">
           <Sidebar />
-          {/* <RightSidebar /> */}
           <AllBikes />
         </Route>
         <Route exact path="/adminaddbike">
           <Sidebar />
-          {/* <RightSidebar /> */}
           <AddBike />
         </Route>
         <Route exact path="/adminadduser">
           <Sidebar />
-          {/* <RightSidebar /> */}
           <AddUser />
         </Route>
         <Route exact path="/adminusers">
@@ -55,13 +50,11 @@ export default function AllRoutes() {
         </Route>
         <Route exact path="/adminmanagebookings">
           <Sidebar />
-          {/* <RightSidebar /> */}
           <AllBookings />
         </Route>
 
         <Route exact path="/admincalender">
           <Sidebar />
-          {/* <RightSidebar /> */}
           <Calender />
         </Route>
         <Route exact path="/chats">

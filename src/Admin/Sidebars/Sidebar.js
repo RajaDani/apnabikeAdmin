@@ -17,7 +17,7 @@ export default function Sidebar() {
         <button class="btn ls-toggle-btn" type="button">
           <i class="zmdi zmdi-menu"></i>
         </button>
-        <a href="" style={{ textDecoration: "none" }}>
+        <Link to="/admin" style={{ textDecoration: "none" }}>
           <img
             src="/logo.png"
             width="50"
@@ -26,13 +26,13 @@ export default function Sidebar() {
             className="ml-2"
           />
           <span class="m-l-10">ApnaBike</span>
-        </a>
+        </Link>
       </div>
       <div class="menu">
         <ul class="list">
           <li>
             <div className="user-info">
-              <a class="image " href="profile.html">
+              <a class="image ">
                 <img src="myPhoto.png" alt="User" />
               </a>
               <div class="detail">
@@ -42,7 +42,7 @@ export default function Sidebar() {
             </div>
           </li>
           <li>
-            <Link to="/admin" href="index.html">
+            <Link to="/admin">
               <i class="zmdi zmdi-home"></i>
               <span>Dashboard</span>
             </Link>

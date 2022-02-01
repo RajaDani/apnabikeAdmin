@@ -7,7 +7,7 @@ import { Button, Modal, ModalBody } from "reactstrap";
 import "./imageStyle.scss";
 import PaginatedItems from "../Pagination";
 import { SessionExpiredAlert } from "../Sweetalert";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 export default function AllBikes(props) {
   const [allBikesComponent, setallBikesComponent] = useState(true);
@@ -44,20 +44,6 @@ export default function AllBikes(props) {
       setallBikesComponent(true);
     }
   }, []);
-
-  // $(document).ready(function () {
-  //   $(".searchField").on("keyup", function () {
-  //     var searchTerm = $(this).val().toLowerCase();
-  //     $("#detailTable tbody tr").each(function () {
-  //       var lineStr = $(this).text().toLowerCase();
-  //       if (lineStr.indexOf(searchTerm) === -1) {
-  //         $(this).hide();
-  //       } else {
-  //         $(this).show();
-  //       }
-  //     });
-  //   });
-  // });
 
   function addNewFunction() {
     setallBikesComponent(!allBikesComponent);
@@ -167,11 +153,11 @@ export default function AllBikes(props) {
               <div class="col-lg-7 col-md-6 col-sm-12">
                 <h2>Dashboard</h2>
                 <ul class="breadcrumb">
-                  <li class="breadcrumb-item">
-                    <a href="index.html">
+                  <Link to="/admin" class="breadcrumb-item">
+                    <a>
                       <i class="zmdi zmdi-home"></i> ApnaBike
                     </a>
-                  </li>
+                  </Link>
                   <li class="breadcrumb-item active">Bikes</li>
                 </ul>
                 <button

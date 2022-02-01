@@ -10,6 +10,7 @@ import TopProduct from "./topselling-product";
 import LatestTransaction from "./latest-transaction";
 import { SessionExpiredAlert } from "../../Sweetalert";
 import { useHistory } from "react-router-dom";
+import BikeDeliverMap from "./BikeDeliverMap";
 
 //Import Image
 
@@ -293,6 +294,7 @@ const Dashboard = () => {
             />
           </Col>
         </Row>
+        <BikeDeliverMap />
         <LatestTransaction />
       </Container>
     </React.Fragment>

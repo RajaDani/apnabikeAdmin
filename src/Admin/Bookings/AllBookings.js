@@ -4,7 +4,7 @@ import AddBooking from "./AddBooking";
 import UpdateBooking from "./UpdateBooking";
 import PaginatedItems from "../Pagination";
 import { SessionExpiredAlert } from "../Sweetalert";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Button } from "reactstrap";
 
 export default function AllBookings() {
@@ -155,11 +155,11 @@ export default function AllBookings() {
               <div class="col-lg-7 col-md-6 col-sm-12">
                 <h2>Dashboard</h2>
                 <ul class="breadcrumb">
-                  <li class="breadcrumb-item">
-                    <a href="index.html">
+                  <Link to="/admin" class="breadcrumb-item">
+                    <a>
                       <i class="zmdi zmdi-home"></i> ApnaBike
                     </a>
-                  </li>
+                  </Link>
                   <li class="breadcrumb-item active">Bookings</li>
                 </ul>
                 <button
