@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/apnabike-admin/static/css/main.ffab2bb6.chunk.css",
-    "main.js": "/apnabike-admin/static/js/main.3fbd2c9c.chunk.js",
-    "main.js.map": "/apnabike-admin/static/js/main.3fbd2c9c.chunk.js.map",
-    "runtime-main.js": "/apnabike-admin/static/js/runtime-main.0047db3c.js",
-    "runtime-main.js.map": "/apnabike-admin/static/js/runtime-main.0047db3c.js.map",
-    "static/js/2.3008d663.chunk.js": "/apnabike-admin/static/js/2.3008d663.chunk.js",
-    "static/js/2.3008d663.chunk.js.map": "/apnabike-admin/static/js/2.3008d663.chunk.js.map",
-    "static/js/3.87722f8a.chunk.js": "/apnabike-admin/static/js/3.87722f8a.chunk.js",
-    "static/js/3.87722f8a.chunk.js.map": "/apnabike-admin/static/js/3.87722f8a.chunk.js.map",
-    "index.html": "/apnabike-admin/index.html",
-    "static/css/main.ffab2bb6.chunk.css.map": "/apnabike-admin/static/css/main.ffab2bb6.chunk.css.map",
-    "static/js/2.3008d663.chunk.js.LICENSE.txt": "/apnabike-admin/static/js/2.3008d663.chunk.js.LICENSE.txt"
+    "main.css": "./static/css/main.ffab2bb6.chunk.css",
+    "main.js": "./static/js/main.3fbd2c9c.chunk.js",
+    "main.js.map": "./static/js/main.3fbd2c9c.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.e1b0f4cd.js",
+    "runtime-main.js.map": "./static/js/runtime-main.e1b0f4cd.js.map",
+    "static/js/2.3008d663.chunk.js": "./static/js/2.3008d663.chunk.js",
+    "static/js/2.3008d663.chunk.js.map": "./static/js/2.3008d663.chunk.js.map",
+    "static/js/3.87722f8a.chunk.js": "./static/js/3.87722f8a.chunk.js",
+    "static/js/3.87722f8a.chunk.js.map": "./static/js/3.87722f8a.chunk.js.map",
+    "index.html": "./index.html",
+    "static/css/main.ffab2bb6.chunk.css.map": "./static/css/main.ffab2bb6.chunk.css.map",
+    "static/js/2.3008d663.chunk.js.LICENSE.txt": "./static/js/2.3008d663.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.0047db3c.js",
+    "static/js/runtime-main.e1b0f4cd.js",
     "static/js/2.3008d663.chunk.js",
     "static/css/main.ffab2bb6.chunk.css",
     "static/js/main.3fbd2c9c.chunk.js"
