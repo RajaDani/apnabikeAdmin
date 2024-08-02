@@ -30,19 +30,23 @@ const SalesAnalyticsChart = () => {
     let adminToken = localStorage.getItem('adminToken');
 
     async function getChartData() {
-        let data = await fetch(BaseUrl + `admin/dashboard`, {
-            method: 'GET',
-            headers: {
-                'Content-type': 'Application/json',
-                "Authorization": `Bearer ${adminToken}`
-            }
-        });
-        let chartData = await data.json();
+        try {
+            let data = await fetch(BaseUrl + `admin/dashboard`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'Application/json',
+                    "Authorization": `Bearer ${adminToken}`
+                }
+            });
+            let chartData = await data.json();
 
-        if (data.status === 200) {
-            setsalesData(chartData);
+            if (data.status === 200) {
+                setsalesData(chartData);
+            }
+            else alert(chartData.message);
+        } catch (err) {
+            console.log("error", err);
         }
-        else alert(chartData.message);
     }
 
     useEffect(() => {

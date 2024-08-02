@@ -29,29 +29,30 @@ export default function Users() {
 
   async function getAllUsers(itemOffset) {
     let itemsPerPage = 8;
+    try {
+      let Users = await fetch(
+        BaseUrl + `admin/users/getAllUsers?offset=${itemOffset}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${adminToken}`,
+          },
+        }
+      );
 
-    let Users = await fetch(
-      BaseUrl + `admin/users/getAllUsers?offset=${itemOffset}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-type": "Application/json",
-          Authorization: `Bearer ${adminToken}`,
-        },
-      }
-    );
+      let allUsers = await Users.json();
+      setPageCount(Math.ceil(allUsers.count / itemsPerPage));
+      setlength(allUsers.count);
 
-    let allUsers = await Users.json();
-    setPageCount(Math.ceil(allUsers.count / itemsPerPage));
-    setlength(allUsers.count);
-
-    if (Users.status === 200) {
-      setusers(allUsers.rows);
-    } else if (Users.status === 440) {
-      SessionExpiredAlert();
-      localStorage.clear();
-      history.push("login");
-    } else alert(allUsers.message);
+      if (Users.status === 200) {
+        setusers(allUsers.rows);
+      } else if (Users.status === 440) {
+        SessionExpiredAlert();
+        localStorage.clear();
+        history.push("login");
+      } else alert(allUsers.message);
+    } catch (err) { console.log(err); }
   }
 
   async function addNewUser() {

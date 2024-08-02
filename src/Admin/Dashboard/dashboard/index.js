@@ -10,7 +10,7 @@ import TopProduct from "./topselling-product";
 import LatestTransaction from "./latest-transaction";
 import { SessionExpiredAlert } from "../../Sweetalert";
 import { useHistory } from "react-router-dom";
-import BikeDeliverMap from "./BikeDeliverMap";
+// import BikeDeliverMap from "./BikeDeliverMap";
 
 //Import Image
 
@@ -247,24 +247,26 @@ const Dashboard = () => {
   ];
 
   const getAllData = async () => {
-    let total = await fetch(BaseUrl + "admin/dashboard/getAllDashboardData", {
-      method: "GET",
-      headers: {
-        "Content-type": "Application/json",
-        Authorization: `Bearer ${adminToken}`,
-      },
-    });
+    try {
+      let total = await fetch(BaseUrl + "admin/dashboard/getAllDashboardData", {
+        method: "GET",
+        headers: {
+          "Content-type": "Application/json",
+          Authorization: `Bearer ${adminToken}`,
+        },
+      });
 
-    let result = await total.json();
-    if (total.status === 200) {
-      settotalBikes(result.bike);
-      settotalOrders(result.orders);
-      settotalUsers(result.users);
-    } else if (total.status === 440) {
-      SessionExpiredAlert();
-      localStorage.clear();
-      history.push("login");
-    } else alert(total.message);
+      let result = await total.json();
+      if (total.status === 200) {
+        settotalBikes(result.bike);
+        settotalOrders(result.orders);
+        settotalUsers(result.users);
+      } else if (total.status === 440) {
+        SessionExpiredAlert();
+        localStorage.clear();
+        history.push("login");
+      } else alert(total.message);
+    } catch (err) { console.log(err); }
   };
 
   useEffect(() => {
@@ -277,8 +279,8 @@ const Dashboard = () => {
         <Row className="mt-4">
           {
             (totalBikes,
-            totalOrders,
-            totalUsers && <MiniWidget reports={reports} />)
+              totalOrders,
+              totalUsers && <MiniWidget reports={reports} />)
           }
         </Row>
 
@@ -294,7 +296,7 @@ const Dashboard = () => {
             />
           </Col>
         </Row>
-        <BikeDeliverMap />
+        {/* <BikeDeliverMap /> */}
         <LatestTransaction />
       </Container>
     </React.Fragment>

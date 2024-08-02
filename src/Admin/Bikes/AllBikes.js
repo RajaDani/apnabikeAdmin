@@ -74,26 +74,29 @@ export default function AllBikes(props) {
 
   async function getAllBikes(itemOffset) {
     let itemsPerPage = 8;
+    try {
+      let Bikes = await fetch(BaseUrl + `admin/bikes?offset=${itemOffset}`, {
+        method: "GET",
+        headers: {
+          "Content-type": "Application/json",
+          Authorization: `Bearer ${adminToken}`,
+        },
+      });
 
-    let Bikes = await fetch(BaseUrl + `admin/bikes?offset=${itemOffset}`, {
-      method: "GET",
-      headers: {
-        "Content-type": "Application/json",
-        Authorization: `Bearer ${adminToken}`,
-      },
-    });
+      let allBikes = await Bikes.json();
+      setPageCount(Math.ceil(allBikes.length / itemsPerPage));
+      setlength(allBikes.length);
 
-    let allBikes = await Bikes.json();
-    setPageCount(Math.ceil(allBikes.length / itemsPerPage));
-    setlength(allBikes.length);
-
-    if (Bikes.status === 200) {
-      setbikes(allBikes.bike);
-    } else if (Bikes.status === 440) {
-      SessionExpiredAlert();
-      localStorage.clear();
-      history.push("login");
-    } else alert(allBikes.message);
+      if (Bikes.status === 200) {
+        setbikes(allBikes.bike);
+      } else if (Bikes.status === 440) {
+        SessionExpiredAlert();
+        localStorage.clear();
+        history.push("login");
+      } else alert(allBikes.message);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   function updateFunction(e) {

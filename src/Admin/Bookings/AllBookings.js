@@ -27,29 +27,30 @@ export default function AllBookings() {
 
   async function getAllBookings(itemOffset) {
     let itemsPerPage = 8;
+    try {
+      let Bookings = await fetch(
+        BaseUrl + `admin/bookings?offset=${itemOffset}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-type": "Application/json",
+            Authorization: `Bearer ${adminToken}`,
+          },
+        }
+      );
 
-    let Bookings = await fetch(
-      BaseUrl + `admin/bookings?offset=${itemOffset}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-type": "Application/json",
-          Authorization: `Bearer ${adminToken}`,
-        },
-      }
-    );
+      let allBookings = await Bookings.json();
+      setPageCount(Math.ceil(allBookings.count / itemsPerPage));
+      setlength(allBookings.count);
 
-    let allBookings = await Bookings.json();
-    setPageCount(Math.ceil(allBookings.count / itemsPerPage));
-    setlength(allBookings.count);
-
-    if (Bookings.status === 200) {
-      setbookings(allBookings.rows);
-    } else if (Bookings.status === 440) {
-      SessionExpiredAlert();
-      localStorage.clear();
-      history.push("login");
-    } else alert(allBookings.message);
+      if (Bookings.status === 200) {
+        setbookings(allBookings.rows);
+      } else if (Bookings.status === 440) {
+        SessionExpiredAlert();
+        localStorage.clear();
+        history.push("login");
+      } else alert(allBookings.message);
+    } catch (err) { console.log(err) }
   }
 
   async function searchBooking(e) {

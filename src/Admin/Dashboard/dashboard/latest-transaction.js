@@ -9,19 +9,24 @@ const LatestTransaction = () => {
     let adminToken = localStorage.getItem('adminToken');
 
     async function getLatestBookings() {
-        let bookings = await fetch(BaseUrl + 'admin/dashboard/getLatestTransactions', {
-            method: 'GET',
-            headers: {
-                'Content-type': 'Application/json',
-                "Authorization": `Bearer ${adminToken}`
-            }
-        });
-        let result = await bookings.json();
+        try {
+            let bookings = await fetch(BaseUrl + 'admin/dashboard/getLatestTransactions', {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'Application/json',
+                    "Authorization": `Bearer ${adminToken}`
+                }
+            });
+            let result = await bookings.json();
 
-        if (bookings.status === 200) {
-            setbookings(result);
+            if (bookings.status === 200) {
+                setbookings(result);
+            }
+            else alert(result.message);
         }
-        else alert(result.message);
+        catch (err) {
+            console.log(err);
+        }
     }
 
 
